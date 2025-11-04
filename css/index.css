@@ -5,6 +5,8 @@ body {
     font-family: "Open Sans", sans-serif;
 }
 
+/* ===================  LOGIN USUARIO  =================== */
+
 #main-bienvenida {
     height: 100vh;
     display: flex;
@@ -15,7 +17,7 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.4);
     background-blend-mode: overlay;
 }
 
@@ -91,6 +93,17 @@ body {
     color: red;
 }
 
+/* =========================================== */
+
+.flex-row-center-center{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===================== NAVBAR ================== */
+
 .fa.fa-plus-square {
     color: #00b941;
     font-size: 60px;
@@ -100,7 +113,27 @@ body {
     font-size: 30px;
 }
 
-nav {
+nav{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#nav-sub-navbar{
+    width: 100%;
+    background-color: #000;
+    height: 30px;
+    gap: 250px;
+    padding: 6px 0px;
+}
+
+#nav-sub-navbar p{
+    color: #fff;
+}
+
+#nav {
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -139,6 +172,10 @@ nav {
     padding: 5px;
     font-size: 12px;
 }
+
+/* ======================================= */
+
+/* ===================  PRODUCTOS  ==================== */
 
 #productos-contenedor {
     display: flex;
@@ -184,12 +221,13 @@ nav {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: start;
     background-color: #0b3a66;
 }
 
 #main-productos h2{
     color: #fff;
+    margin-left: 170px;
 }
 
 #producto {
@@ -257,3 +295,4 @@ nav {
     color: #ff763f;
 }
 
+/* ======================================= */
