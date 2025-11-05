@@ -201,6 +201,7 @@ nav{
     background-color: #fff;
     padding: 40px;
     border-radius: 12px;
+    margin-bottom: 30px;
 }
 
 .productos-categorias {
@@ -296,3 +297,185 @@ nav{
 }
 
 /* ======================================= */
+
+/* ================= ADMIN DASHBOARD =================== */
+
+ul li{
+    margin-right: 100px;
+    list-style: none;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.nav-dashboard-subcontainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+nav ul li {
+  position: relative;
+  cursor: pointer;
+  padding: 5px 0;
+}
+
+nav ul li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  height: 2px;
+  background-color: #ef7603; 
+  transition: width 0.3s ease;
+}
+
+nav ul li:hover::after {
+  width: 100%;
+}
+
+
+.flex-col-start-center{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+}
+
+.formulario-productos{
+    border: 2px solid #000;
+    border-radius: 12px;
+    padding: 24px;
+    gap: 22px;
+    width: 40%;
+    height: 400px;
+    background-color: #fff;
+}
+
+.formulario-productos button{
+    background-color: #fff;
+    border-radius: 8px;
+    align-self: center;
+    padding: 8px 64px;
+    width: 400px;
+    height: 50px;
+    cursor: pointer;
+    background-color: #00a339;
+    color: #fff;
+    border: none;
+
+    &:hover{
+        opacity: 0.7;
+        transition: all 0.4s;
+    }
+}
+
+.formulario-productos div label{
+    font-weight: 600;
+    font-size: 1.3rem;
+    margin-right: 20px;
+}
+
+.formulario-productos div input{
+    border-radius: 12px;
+    height: 30px;
+    width: 400px;
+    border: 1px solid #ebebeb;
+    font-size: 1.3rem;
+    padding: 8px 24px;
+}
+
+.formulario-productos div select{
+    background-color: #fff;
+    border-radius: 12px;
+    height: 50px;
+    width: 400px;
+    border: 1px solid #ebebeb;
+    font-size: 1.3rem;
+    padding: 12px 22px;
+}
+
+.formulario-productos div select option{
+    border-radius: 12px;
+    font-size: 1.3rem;
+}
+
+#main-crear-productos{
+    height: 75vh;
+    background-color: #0b3a66;
+}
+
+#main-crear-productos h1{
+    color: #ef7603;
+    margin-top: 0;
+}
+
+/* =========== MODIFICAR PRODUCTOS (dashboard) ============== */
+
+#main-modificar-productos{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    height: 75vh;
+    background-color: #0b3a66;
+}
+
+#main-modificar-productos h1{
+    margin-top: 70px;
+    color: #ef7603;
+}
+
+#input-id-producto{
+    height: 30px;
+    text-align: center;
+    font-size: 1.7rem;
+    width: 80px;
+    padding: 20px;
+    margin-right: 40px;
+    border-radius: 8px;
+    border: none;
+}
+
+#buscar-producto{
+    border: none;
+    border-radius: 6px;
+    background-color: #00a339;
+    padding: 20px;
+    color: #fff;
+    cursor: pointer;
+}
+
+#contenedor-producto-encontrado{
+    background-color: #fff;
+    border-radius: 8px;
+    margin-top: 80px;
+}
+
+#contenedor-producto-encontrado div{
+    padding: 20px;
+}
+
+#contenedor-producto-encontrado div div{
+    background-color: #ef7603;
+    color: #fff;
+    border-radius: 8px;
+    padding: 5px 10px;
+}
+
+#contenedor-producto-encontrado img{
+    width: 200px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+/* =============================================== */

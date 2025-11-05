@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Dashboard</title>
+</head>
+
+<body>
+    <nav>
+        <div class="flex-row-center-center" id="nav-sub-navbar">
+            <p>Santiago Ezequiel Oldani</p>
+            <p>Damián Posada</p>
+        </div>
+        <div class="flex-row-center-center nav-dashboard-subcontainer">
+            <div class="nav-dashboard" id="nav-logo">
+                <i class="fa fa-plus-square" aria-hidden="true"></i>
+                <h1>Farmacy</h1>
+            </div>
+            <ul class="flex-row-center-center">
+                <li>Ver productos</li>
+                <li>Consultar</li>
+                <li>Crear</li>
+                <li>Modificar</li>
+                <li>Eliminar</li>
+                <li>Ventas</li>
+            </ul>
+        </div>
+    </nav>
+
+    <main id="main-modificar-productos">
+        <h1>Buscar producto por id y luego modificar</h1>
+        <div class="flex-row-center-center">
+            <input id="input-id-producto" name="id" placeholder="id..." type="text">
+            <div onclick="buscarProductoPorId()" id="buscar-producto">
+                <span>Buscar</span>
+            </div>
+        </div>
+        <div id="contenedor-producto-encontrado" class="flex-col-center-center">
+        </div>
+    </main>
+
+</body>
+<script>
+    const idProducto = document.getElementById("input-id-producto");
+    const contenedorProducto = document.getElementById("contenedor-producto-encontrado");
+    const contenedorMain = document.getElementById("main-modificar-productos");
+
+    async function buscarProductoPorId() {
+        try {
+            let respuesta = await fetch(`http://localhost:3000/productos/${idProducto.value}`);
+            let data = await respuesta.json();
+            let producto = data.payload[0];
+
+            contenedorProducto.innerHTML = `
+            <img src="${producto.imagen}"/>
+            <div>
+                <p>${producto.nombre}</p>
+                <p>$${producto.precio}</p>
+                <span>Producto: ${producto.activo === 1 ? "Activo" : "Inactivo"}</span>
+                <span>ID: ${producto.id}</span>
+                <span>Tipo: ${producto.tipo}</span>
+                <div id="boton-mostrar-modificacion" class='flex-col-center-center' onclick='verModificacionProducto(${JSON.stringify(producto)})'>
+                    <span>Modificar producto</span>
+                </div>
+            </div>
+            `
+        } catch (error) {
+            console.error("Error interno en el servidor", error);
+        }
+    }
+
+    async function verModificacionProducto(producto) {
+        contenedorMain.innerHTML = `
+        <h1>Modificar producto</h1>
+        <form class="flex-col-center-center formulario-productos" id="formulario-modificar-productos">
+            <div class="flex-row-start-center">
+                <label for="nombre">Nombre</label>
+                <input name="nombre" value="${producto.nombre}" id="nombre" type="text">
+            </div>
+            <div class="flex-row-start-center">
+                <label for="tipo">Categoria</label>
+                <select value="${producto.tipo}" name="tipo" id="tipo">
+                    <option ${producto.tipo === "medicamento" && "selected"} value="medicamento">Medicamento</option>
+                    <option ${producto.tipo === "crema" && "selected"} value="crema">Crema</option>
+                </select>
+            </div>
+            <div class="flex-row-start-center">
+                <label for="precio">Precio</label>
+                <input value="${producto.precio}" name="precio" id="precio" type="number">
+            </div>
+            <div class="flex-row-start-center">
+                <label for="imagen">Imagen</label>
+                <input value="${producto.imagen}" name="imagen" id="imagen" type="text">
+            </div>
+            <button type="submit">Modificar</button>
+        </form>
+        `
+
+        const formularioModificarProducto = document.getElementById("formulario-modificar-productos");
+
+        formularioModificarProducto.addEventListener("submit", async (e) => {
+
+        e.preventDefault();
+        let formData = new FormData(e.target);
+        let data = Object.fromEntries(formData.entries());
+
+        try {
+            let response = await fetch(`http://localhost:3000/productos/${idProducto.value}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+
+            if (response.ok) {
+                console.log(response);
+                let result = await response.json();
+                console.log(result.message);
+            }
+        } catch (error) {
+            console.error("Error al modificar el producto", error);
+        }
+    })
+    }
+
+    
+
+    
+
+
+</script>
+
+</html>
