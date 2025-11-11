@@ -177,11 +177,75 @@ nav{
 
 /* ===================  PRODUCTOS  ==================== */
 
+.modal-container{
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#modal-container{
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#modal{
+    width: 450px;
+    height: 350px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    background-color: #fff;
+    padding: 0 54px;
+    border-radius: 16px;
+}
+
+.fa.fa-window-close{
+    font-size: 3rem;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+#modal h4{
+    font-size: 2rem;
+    text-align: center;
+}
+
+.fa.fa-check-circle{
+    color: #00b941;
+    font-size: 4rem;
+}
+
+.fa.fa-exclamation-circle{
+    color: red;
+    font-size: 4rem;
+}
+
 #productos-contenedor {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 100px;
     flex-direction: row;
     border: 1px solid #e5e5e5;
-    width: 100%;
+    width: 75%;
     height: 700px;
 }
 
@@ -190,6 +254,10 @@ nav{
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+#todos-los-productos{
+    border-top: 1px solid #e5e5e5;
 }
 
 #productos {
@@ -214,6 +282,7 @@ nav{
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
     border-right: none;
+    border-top: none;
     background-color: #fff;
     cursor: pointer;
 }
@@ -234,13 +303,13 @@ nav{
 #producto {
     display: flex;
     flex-direction: column;
-    align-items: start;
-    justify-content: center;
-    border: 1px solid #e5e5e5;
+    align-items: center;
+    justify-content: start;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 250px;
-    height: 350px;
-    padding: 5px 15px;
-    border-radius: 8px;
+    height: 300px;
+    border-radius: 14px;
+    padding: 15px 0px;
     gap: 14px;
     background-color: #fff;
     &:hover{
@@ -248,35 +317,44 @@ nav{
     }
 }
 
+#sub-contenedor-producto{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+}
+
 #producto img {
-    width: 200px;
-    height: 100px;
-    border-bottom: 1px solid #e5e5e5;
-    margin-bottom: 10px;
+    width: 250px;
+    height: 150px;
     align-self: center;
 }
 
 #producto h5 {
-    font-size: 1.3rem;
+    font-size: 1rem;
     margin: 0;
     font-weight: 600;
-    
+    margin-bottom: 10px;
 }
 
-#producto div {
+#agregar-producto-button {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #000;
-    padding: 8px 54px;
-    border-radius: 6px;
+    border: none;
+    border-radius: 8px;
     cursor: pointer;
     background-color: #00a339;
+    font-weight: 600;
     color: #fff;
     align-self: center;
-
+    justify-self: end;
+    padding: 6px 18px;
+    width: 80%;
+    height: 25px;
     &:hover {
-        filter: brightness(0.7);
+        filter: brightness(0.8);
         transition: all 0.5s;
     }
 }
@@ -291,9 +369,10 @@ nav{
 
 #producto p {
     margin: 0;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     font-weight: 700;
-    color: #ff763f;
+    color: #0b3a66;
+    margin-bottom: 20px;
 }
 
 /* ======================================= */
@@ -421,12 +500,23 @@ nav ul li:hover::after {
 
 /* =========== MODIFICAR PRODUCTOS (dashboard) ============== */
 
+.flex-row-center-around{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: start;
+}
+
+#producto-id-activo{
+    width: 100%;
+}
+
 #main-modificar-productos{
     display: flex;
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    height: 75vh;
+    height: 86vh;
     background-color: #0b3a66;
 }
 
@@ -456,26 +546,50 @@ nav ul li:hover::after {
 }
 
 #contenedor-producto-encontrado{
+    display: none;
+    justify-content: start;
     background-color: #fff;
     border-radius: 8px;
-    margin-top: 80px;
+    margin-top: 30px;
+    width: 350px;
+    height: fit-content;
+    padding: 40px;
 }
 
-#contenedor-producto-encontrado div{
-    padding: 20px;
+#contenedor-producto-encontrado span::first-letter{
+    text-transform: uppercase;
 }
 
-#contenedor-producto-encontrado div div{
+#contenedor-producto-encontrado span{
+    font-size: 1rem;
+    font-weight: 600;
+    width: 125px;
+}
+
+#contenedor-producto-encontrado p{
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+#boton-mostrar-modificacion{
     background-color: #ef7603;
+    cursor: pointer;
     color: #fff;
     border-radius: 8px;
-    padding: 5px 10px;
+    padding: 10px 40px;
+    width: 200px;
+    white-space: nowrap;
+
+    &:hover{
+        opacity: 0.8;
+        transition: all 0.5s;
+    }
 }
 
 #contenedor-producto-encontrado img{
     width: 200px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    height: 200px;
+    margin-bottom: 20px;
 }
 
 /* =============================================== */
