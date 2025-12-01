@@ -1,3 +1,4 @@
+const carrito = [];
 
 function agregarAlCarrito(idProducto) {
   // Buscar
