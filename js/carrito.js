@@ -2,14 +2,97 @@
 //             INICIALIZACIÓN
 // =========================================
 let carrito = [];
-
+let productosArray = [];
 // =========================================
 //             LÓGICA PRINCIPAL (ONCLICK)
 // =========================================
 
+const modalContainer = document.getElementById("modal-container");
+const buscadorProductos = document.getElementById("buscador-productos");
+const botonFinalizarCompra = document.getElementById("finalizar-compra");
+
+botonFinalizarCompra.addEventListener("click", () =>{
+    modalContainer.style.display = "block";
+})
+
+buscadorProductos.addEventListener("keyup", (e) => buscarProductos(e));
+
+function buscarProductos(e) {
+    let productosFiltrados = productosArray.filter(producto => producto.nombre.toLowerCase().includes(e.target.value.toLowerCase()));
+    mostrarProductos(productosFiltrados);
+}
+
+const productosContenedor = document.getElementById("productos-contenedor");
+
+async function traerProductos() {
+    try {
+        const response = await fetch("http://localhost:3000/api/products");
+
+        if (!response.ok) {
+            throw new Error(`HTTP: ${response.status}`)
+        }
+
+        productosArray = await response.json();
+        productosArray = productosArray.payload;
+
+        mostrarProductos(productosArray);
+
+    } catch (error) {
+        console.error("error al obtener los productos", error);
+    }
+}
+
+function mostrarProductos(arrayDeProductos) {
+    let productosHTML = ""
+    if (arrayDeProductos.length === 0) {
+        productosHTML = "Cargando productos..."
+    } else {
+        arrayDeProductos.forEach((producto) => {
+            if (producto.activo) {
+                productosHTML += `
+                            <div id="producto">
+                                <div class="imagen-contenedor"> 
+                                    <img src="${producto.imagen}" alt="">
+                                </div>
+                                <div id="producto-subcontenedor-start">
+                                    <div id="nombre-categoria-producto-contenedor">
+                                        <h5>${producto.nombre}</h5>
+                                        <h6>${producto.categoria}</h6>
+                                    </div>
+                                    <p>$${producto.precio.toLocaleString('es-AR')}</p>
+                                    <div id="agregar-producto-button" onclick="agregarProducto(${producto.id}, '${producto.nombre}', ${producto.precio}, '${producto.imagen}')">
+                                    Agregar producto
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        `
+            }
+            productosContenedor.innerHTML = productosHTML;
+        })
+    }
+}
+
+function filtrarProductos(divClickeado, categoria) {
+    const botonesCategoria = document.querySelectorAll('.productos-categorias');
+
+    botonesCategoria.forEach(boton => {
+        boton.classList.remove('categoria-activa');
+    });
+
+    divClickeado.classList.add('categoria-activa');
+
+    if (categoria !== "todos") {
+        let filteredArrayProductos = productosArray.filter((producto) => producto.categoria === categoria);
+        mostrarProductos(filteredArrayProductos);
+    } else {
+        mostrarProductos(productosArray);
+    }
+}
+
+
 // Esta función se activa cuando oprimes el div en el HTML
-function agregarProducto(id, nombre, precio) {
-    
+function agregarProducto(id, nombre, precio, imagen) {
     // 1. Buscar si ya existe
     const productoEnCarrito = carrito.find(item => item.id === id);
 
@@ -20,6 +103,7 @@ function agregarProducto(id, nombre, precio) {
             id: id,
             nombre: nombre,
             precio: precio,
+            imagen: imagen,
             cantidad: 1
         });
     }
@@ -28,7 +112,7 @@ function agregarProducto(id, nombre, precio) {
     actualizarContadorCarrito();
     mostrarCarrito();
     guardarCarrito();
-    
+
     // 3. ABRIR EL CARRITO AUTOMÁTICAMENTE
     const carritoLateral = document.getElementById('carrito-lateral');
     if (carritoLateral) {
@@ -72,7 +156,7 @@ function eliminarProducto(idProducto) {
     carrito = carrito.filter(producto => producto.id !== idProducto);
     actualizarContadorCarrito();
     mostrarCarrito();
-    guardarCarrito(); 
+    guardarCarrito();
 }
 
 function actualizarCantidadProducto(idProducto, nuevaCantidad) {
@@ -103,7 +187,7 @@ function mostrarCarrito() {
     let total = 0;
 
     if (carrito.length === 0) {
-        listaCarrito.innerHTML = `<div class="carrito-vacio"><p>No hay productos en el carrito</p></div>`;
+        listaCarrito.innerHTML = `<div class="carrito-vacio"><p>No hay productos en el carrito.</p></div>`;
         if (totalPrecioElement) totalPrecioElement.textContent = '0';
         return;
     }
@@ -114,19 +198,22 @@ function mostrarCarrito() {
 
         const itemHTML = `
             <li class="bloque-item">
+                <img id="carrito-imagen-producto" src="${producto.imagen}" alt="">
                 <div class="info-producto">
                     <p class="nombre-item">${producto.nombre}</p>
                     <p class="precio-item">$${producto.precio.toLocaleString('es-AR')} c/u</p>
-                </div>
-                <div class="controles-cantidad">
-                    <button class="btn-cantidad btn-restar" onclick="actualizarCantidadProducto(${producto.id}, ${producto.cantidad - 1})">-</button>
+                    <div class="controles-cantidad">
+                    <button class="btn-cantidad btn-restar" onclick="actualizarCantidadProducto(${producto.id}, ${producto.cantidad - 1})"><i class="fa fa-minus" aria-hidden="true"></i></button>
                     <span class="cantidad-item">${producto.cantidad}</span>
-                    <button class="btn-cantidad btn-sumar" onclick="actualizarCantidadProducto(${producto.id}, ${producto.cantidad + 1})">+</button>
-                    <button class="boton-eliminar" onclick="eliminarProducto(${producto.id})">Eliminar</button>
+                    <button class="btn-cantidad btn-sumar" onclick="actualizarCantidadProducto(${producto.id}, ${producto.cantidad + 1})"><i class="fa fa-plus" aria-hidden="true"></i></button>
                 </div>
+                </div>
+                
                 <div class="subtotal-item">
-                    <strong>$${subtotal.toLocaleString('es-AR')}</strong>
+                    <div class="boton-eliminar" onclick="eliminarProducto(${producto.id})"><i class="fa fa-times" aria-hidden="true"></i></div>
+                    <span>$${subtotal.toLocaleString('es-AR')}</span>
                 </div>
+                
             </li>
         `;
         listaCarrito.innerHTML += itemHTML;
@@ -143,13 +230,13 @@ function mostrarCarrito() {
 
 document.addEventListener('DOMContentLoaded', () => {
     cargarCarrito();
-    
+
     // Solo configuramos los botones estáticos del carrito (abrir/cerrar/vaciar)
     const botonAbrir = document.getElementById('nav-carrito');
     const botonCerrar = document.getElementById('cerrar-carrito');
     const carritoLateral = document.getElementById('carrito-lateral');
     const botonVaciar = document.getElementById('vaciar-carrito');
-    
+
     if (botonAbrir && carritoLateral) {
         botonAbrir.addEventListener('click', () => {
             carritoLateral.classList.add('visible');
@@ -165,3 +252,9 @@ document.addEventListener('DOMContentLoaded', () => {
         botonVaciar.addEventListener('click', vaciarCarrito);
     }
 });
+
+function init() {
+    traerProductos();
+}
+
+init();

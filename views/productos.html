@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <title>Document</title>
+    <title>Farmacy</title>
 </head>
 
 <body>
@@ -29,111 +29,47 @@
     </nav>
 
     <main id="main-productos">
-        <h2>Nuestros productos</h2>
+        <div class="titulo-productos-input-buscarlos">
+            <h2>Nuestros productos</h2>
+            <input type="text" id="buscador-productos" placeholder="Buscar productos...">
+        </div>
         <div id="productos">
             <div class="flex-col-center-center">
-                <div class="productos-categorias" id="todos-los-productos">
-                    <span>Todos los productos</span>
+                <div onclick="filtrarProductos(this,'todos')" class="productos-categorias categoria-activa" id="todos-los-productos">
+                    Todos los productos
                 </div>
-                <div class="productos-categorias">
-                    <span>Medicamentos</span>
+                <div onclick="filtrarProductos(this,'medicamento')" class="productos-categorias">
+                    Medicamentos
                 </div>
-                <div class="productos-categorias">
-                    <span>Cremas</span>
+                <div onclick="filtrarProductos(this,'crema')" class="productos-categorias">
+                    Cremas
                 </div>
             </div>
             <div id="productos-contenedor">
-                <div id="producto">
-                    <img src="../assets//imgs/ibuprofeno.webp" alt="">
-                    <h5>Ibuprofeno 400mg</h5>
-                    <p>$2.817</p>
-                    <div onclick="agregarProducto(2, 'Vitamina C', 3500)">
-                      Agregar producto
-                    </div>
-                </div>
-                <div id="producto">
-                    <img src="../assets//imgs/ibuprofeno.webp" alt="">
-                    <div id="sub-contenedor-producto">
-                        <h5>Ibuprofeno 400mg</h5>
-                        <p>$2.817</p>
-                        <div id="agregar-producto-button">Añadir al carrito</div>
-                    </div>
-                </div>
-                <div id="producto">
-                    <img src="../assets//imgs/ibuprofeno.webp" alt="">
-                    <div id="sub-contenedor-producto">
-                        <h5>Ibuprofeno 400mg</h5>
-                        <p>$2.817</p>
-                        <div id="agregar-producto-button">Añadir al carrito</div>
-                    </div>
-                </div>
-                <div id="producto">
-                    <img src="../assets//imgs/ibuprofeno.webp" alt="">
-                    <div id="sub-contenedor-producto">
-                        <h5>Ibuprofeno 400mg</h5>
-                        <p>$2.817</p>
-                        <div id="agregar-producto-button">Añadir al carrito</div>
-                    </div>
-                </div>
-                <div id="producto">
-                    <img src="../assets//imgs/ibuprofeno.webp" alt="">
-                    <div id="sub-contenedor-producto">
-                        <h5>Ibuprofeno 400mg</h5>
-                        <p>$2.817</p>
-                        <div id="agregar-producto-button">Añadir al carrito</div>
-                    </div>
-                </div>
-                <div id="producto">
-                    <img src="../assets//imgs/ibuprofeno.webp" alt="">
-                    <div id="sub-contenedor-producto">
-                        <h5>Ibuprofeno 400mg</h5>
-                        <p>$2.817</p>
-                        <div id="agregar-producto-button">Añadir al carrito</div>
-                    </div>
-                </div>
-                <div id="producto">
-                    <img src="../assets//imgs/ibuprofeno.webp" alt="">
-                    <div id="sub-contenedor-producto">
-                        <h5>Ibuprofeno 400mg</h5>
-                        <p>$2.817</p>
-                        <div id="agregar-producto-button">Añadir al carrito</div>
-                    </div>
-                </div>
-                <div id="producto">
-                    <img src="../assets//imgs/ibuprofeno.webp" alt="">
-                    <div id="sub-contenedor-producto">
-                        <h5>Ibuprofeno 400mg</h5>
-                        <p>$2.817</p>
-                        <div id="agregar-producto-button">Añadir al carrito</div>
-                    </div>
-                </div>
-                <div id="producto">
-                    <img src="../assets//imgs/ibuprofeno.webp" alt="">
-                    <div id="sub-contenedor-producto">
-                        <h5>Ibuprofeno 400mg</h5>
-                        <p>$2.817</p>
-                        <div id="agregar-producto-button">Añadir al carrito</div>
-                    </div>
-                </div>
-              </div>
+
             </div>
         </div>
     </main>
     <!-- carrito -->
-    <section id="carrito-lateral" class="carrito-modal"> 
-      <div class="carrito-contenido">
-        <button id="cerrar-carrito" class="btn-cerrar">X</button>
-        <h2> Carrito de Compras</h2>
-        <button id="vaciar-carrito" class="btn-vaciar">Vaciar Carrito</button>
+    <section id="carrito-lateral" class="carrito-modal">
+        <button id="cerrar-carrito" class="btn-cerrar"><i class="fa fa-times" aria-hidden="true"></i></button>
+        <div class="titulo-carrito-vaciar">
+            <h2>Tu carrito</h2>
+            <button id="vaciar-carrito" class="btn-vaciar"><i class="fa fa-trash" aria-hidden="true"></i></button>
+        </div>
         <ul id="lista-carrito" class="lista-carrito">
         </ul>
         <div class="total-carrito">
-          <strong>Total: $<span id="total-precio">0</span></strong>
+            <strong>Total: $<span id="total-precio">0</span></strong>
         </div>
-        <button class="btn-comprar">Finalizar Compra</button>
-      </div>
+        <button id="finalizar-compra" class="btn-comprar">Finalizar Compra</button>
     </section>
-  </body>
+    <div id="modal-container">
+        <div id="modal">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </div>
+    </div>
+</body>
 <script src="../js/carrito.js"></script>
 
 </html>
