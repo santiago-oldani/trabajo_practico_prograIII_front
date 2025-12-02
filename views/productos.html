@@ -23,7 +23,7 @@
 
             <div id="nav-carrito">
                 <i class="fa fa-cart-plus" aria-hidden="true"></i>
-                <span>0</span>
+                <span id="contador-carrito">0</span>
             </div>
         </div>
     </nav>
@@ -45,10 +45,10 @@
             <div id="productos-contenedor">
                 <div id="producto">
                     <img src="../assets//imgs/ibuprofeno.webp" alt="">
-                    <div id="sub-contenedor-producto">
-                        <h5>Ibuprofeno 400mg</h5>
-                        <p>$2.817</p>
-                        <div id="agregar-producto-button">Añadir al carrito</div>
+                    <h5>Ibuprofeno 400mg</h5>
+                    <p>$2.817</p>
+                    <div onclick="agregarProducto(2, 'Vitamina C', 3500)">
+                      Agregar producto
                     </div>
                 </div>
                 <div id="producto">
@@ -115,10 +115,25 @@
                         <div id="agregar-producto-button">Añadir al carrito</div>
                     </div>
                 </div>
+              </div>
             </div>
         </div>
     </main>
-</body>
-<script src="/js//main.js"></script>
+    <!-- carrito -->
+    <section id="carrito-lateral" class="carrito-modal"> 
+      <div class="carrito-contenido">
+        <button id="cerrar-carrito" class="btn-cerrar">X</button>
+        <h2> Carrito de Compras</h2>
+        <button id="vaciar-carrito" class="btn-vaciar">Vaciar Carrito</button>
+        <ul id="lista-carrito" class="lista-carrito">
+        </ul>
+        <div class="total-carrito">
+          <strong>Total: $<span id="total-precio">0</span></strong>
+        </div>
+        <button class="btn-comprar">Finalizar Compra</button>
+      </div>
+    </section>
+  </body>
+<script src="../js/carrito.js"></script>
 
 </html>
