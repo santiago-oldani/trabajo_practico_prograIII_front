@@ -630,3 +630,33 @@ nav ul li:hover::after {
   max-width: 200px;
   margin-bottom: 1rem;
 }
+
+.carrito-modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 350px; /* o el ancho que prefieras */
+    height: 100%;
+    background-color: white;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    transform: translateX(100%); /* Oculto por defecto, fuera de la vista */
+    transition: transform 0.4s ease-out; /* Transición suave */
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.carrito-modal.visible {
+  /* Visible al añadir esta clase */
+  transform: translateX(0);
+}
+
+.btn-cerrar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+}
