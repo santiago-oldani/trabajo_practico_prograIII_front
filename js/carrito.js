@@ -7,13 +7,150 @@ let productosArray = [];
 //             LÓGICA PRINCIPAL (ONCLICK)
 // =========================================
 
-const modalContainer = document.getElementById("modal-container");
 const buscadorProductos = document.getElementById("buscador-productos");
 const botonFinalizarCompra = document.getElementById("finalizar-compra");
 
-botonFinalizarCompra.addEventListener("click", () =>{
-    modalContainer.style.display = "block";
+botonFinalizarCompra.addEventListener("click", () => {
+    const modal = document.getElementById("modal-container");
+    modal.style.display = 'block';
+    let carritoCargado = localStorage.getItem('carritoFarmacia');
+    carritoCargado = JSON.parse(carritoCargado);
+    console.log(carritoCargado);
+    let montoTotal = 0;
+
+    const productosHTML = carritoCargado ? carritoCargado.map((producto) => {
+        montoTotal += (producto.precio * producto.cantidad);
+        return `<div id="modal-contenedor-resumen">
+                    <div id="modal-subcontenedor-resumen">
+                        <div class="flex-row-center-center">
+                            <span>${producto.cantidad}</span>
+                            <span>${producto.nombre}</span>
+                        </div>
+                        <span>$${(producto.precio * producto.cantidad).toLocaleString('es-AR')}</span>
+                    </div>
+                    
+                </div>`;
+    }).join('') : 'El carrito está vacío.';
+
+    modal.innerHTML = `
+    <div id='modal' class='flex-col-center-center'>
+        <i class="fa fa-window-close" id='cerrar-modal' aria-hidden="true"></i>
+        <h4>Resumen de tu compra: </h4>
+        <hr>
+        
+        ${productosHTML}  
+        <hr>
+        <span><strong>Total: $${montoTotal.toLocaleString('es-AR')}</strong></span>
+        <button id="boton-imprimir">Imprimir ticket</button>
+    </div>
+`;
+
+    const botonImprimir = document.getElementById("boton-imprimir");
+    botonImprimir.addEventListener("click", imprimirTicket);
+
+    const botonCerrarModal = document.getElementById("cerrar-modal");
+
+    botonCerrarModal.addEventListener("click", () => {
+        modal.style.display = 'none';
+    })
+
+    window.addEventListener("click", (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    })
 })
+
+
+function imprimirTicket() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    let y = 10;
+    const MARGEN_X = 15; // Margen izquierdo fijo
+
+    // Calcula el total de la compra antes de empezar a imprimir
+    const totalCompra = carrito.reduce((sum, prod) => sum + (prod.precio * prod.cantidad), 0);
+
+    // --- ENCABEZADO Y TÍTULO ---
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(20);
+    doc.setTextColor('#0B3A66');
+    doc.text("FARMACIA - TICKET DE COMPRA", MARGEN_X, y);
+    y += 10;
+
+    // Línea separadora
+    doc.setDrawColor('#000');
+    doc.line(MARGEN_X, y, 195, y);
+    y += 8;
+
+    // --- ENCABEZADOS DE TABLA ---
+    // Definimos las coordenadas X exactas para las columnas:
+    const COL_CANTIDAD = MARGEN_X;
+    const COL_DESCRIPCION = MARGEN_X + 20;
+    const COL_PRECIO_U_FINAL = 145; // Posición donde termina el texto de Precio U.
+    const COL_SUBTOTAL_FINAL = 190; // Posición donde termina el texto del Subtotal.
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+
+    // Imprimir los encabezados
+    doc.text("Cant.", COL_CANTIDAD, y);
+    doc.text("Descripción", COL_DESCRIPCION, y);
+    doc.text("Precio U.", COL_PRECIO_U_FINAL, y, { align: 'right' }); // Alineado a la derecha
+    doc.text("Subtotal", COL_SUBTOTAL_FINAL, y, { align: 'right' }); // Alineado a la derecha
+    y += 5;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+
+    // --- DETALLE DE PRODUCTOS ---
+    carrito.forEach(prod => {
+        const subtotal = prod.precio * prod.cantidad;
+        // Limitar la longitud del nombre para que no se superponga con los precios
+        const nombreProducto = prod.nombre.substring(0, 45) + (prod.nombre.length > 45 ? '...' : '');
+
+        // 1. Cantidad (Alineación izquierda)
+        doc.text(prod.cantidad.toString(), COL_CANTIDAD, y);
+
+        // 2. Descripción (Alineación izquierda)
+        doc.text(nombreProducto, COL_DESCRIPCION, y);
+
+        // 3. Precio Unitario (Alineación derecha)
+        doc.text(`$${prod.precio.toFixed(2)}`, COL_PRECIO_U_FINAL, y, { align: 'right' });
+
+        // 4. Subtotal (Alineación derecha)
+        doc.text(`$${subtotal.toFixed(2)}`, COL_SUBTOTAL_FINAL, y, { align: 'right' });
+
+        // Espaciado corregido
+        y += 6;
+
+        if (y > 280) {
+            doc.addPage();
+            y = 15;
+        }
+    });
+
+    // --- SEPARADOR Y TOTAL ---
+    y += 5;
+    doc.setDrawColor("#000");
+    doc.line(MARGEN_X, y, 195, y);
+    y += 8;
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+
+    // Etiqueta "TOTAL"
+    doc.text("TOTAL DE LA COMPRA:", 130, y, { align: 'right' }); // Mover la etiqueta más a la derecha
+
+    // Valor del Total
+    doc.setFontSize(16);
+    doc.setTextColor('#000');
+    doc.text(`$${totalCompra.toFixed(2)}`, COL_SUBTOTAL_FINAL, y, { align: 'right' }); // Usar la misma X final del Subtotal
+
+    // --- GUARDAR PDF ---
+    doc.save("ticket_compra.pdf");
+}
 
 buscadorProductos.addEventListener("keyup", (e) => buscarProductos(e));
 

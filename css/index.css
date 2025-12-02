@@ -208,8 +208,12 @@ nav {
 }
 
 #modal {
-    width: 450px;
-    height: 350px;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    width: 50%;
+    height: 50%;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -217,20 +221,75 @@ nav {
     right: 0;
     margin: auto;
     background-color: #fff;
-    padding: 0 54px;
+    padding: 24px 54px;
     border-radius: 16px;
     
+}
+
+#modal-contenedor-resumen{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    margin-top: 10px;
+    width: 100%;
+}
+
+#modal-subcontenedor-resumen{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+#modal-subcontenedor-resumen div{
+    gap: 20px;
+}
+
+#modal hr{
+    width: 100%;
+}
+
+#modal span{
+    margin-top: 5px;
+    align-self: flex-end;
+    font-size: 1.3rem;
+}
+
+#boton-imprimir{
+    background-color: #ef7603;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 20px;
+    width: 200px;
+    height: 50px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    align-self: center;
+    margin-top: auto;
+    margin-bottom: 30px;
+    &:hover{
+        opacity: 0.8;
+    }
 }
 
 .fa.fa-window-close {
     font-size: 3rem;
     cursor: pointer;
     align-self: flex-end;
+    
 }
 
 #modal h4 {
     font-size: 2rem;
     text-align: center;
+    margin-bottom: 0px;
 }
 
 .fa.fa-check-circle {

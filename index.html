@@ -1,33 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/index.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <title>Farmacy</title>
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/index.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <title>Farmacy</title>
+</head>
 
-  <body>
-    <main id="main-bienvenida">
-      <section id="bienvenida">
-        <div id="bienvenida-titulo">
-          <h1>Bienvenido a Farmacy</h1>
-          <h2>Inserte su nombre para realizar su compra.</h2>
+<body>
+  <main id="main-bienvenida">
+    <section id="bienvenida">
+      <div id="bienvenida-titulo">
+        <h1>Bienvenido a Farmacy</h1>
+        <h2>Inserte su nombre para realizar su compra.</h2>
+      </div>
+      <div id="bienvenida-contenedor-nombre-invalido"></div>
+      <div id="bienvenida-contenedor-input-boton">
+        <input id="bienvenida-input-nombre-usuario" placeholder="Ingrese su nombre..." type="text">
+        <div onclick="guardarNombre()" id="bienvenida-boton-continuar">
+          <span>Continuar</span>
         </div>
-        <div id="bienvenida-contenedor-nombre-invalido"></div>
-        <div id="bienvenida-contenedor-input-boton">
-          <input id="bienvenida-input-nombre-usuario" placeholder="Ingrese su nombre..." type="text">
-          <div onclick="guardarNombre()" id="bienvenida-boton-continuar">
-            <span>Continuar</span>
-          </div>
-        </div>
+      </div>
 
-      </section>
-    </main>
-  </body>
-  <script src="/js/main.js"></script>
+    </section>
+  </main>
+</body>
+<script>
+  const inputNombreUsuario = document.getElementById("bienvenida-input-nombre-usuario");
+  const containerBienvenida = document.getElementById("bienvenida-contenedor-nombre-invalido");
+  function guardarNombre() {
+    const contieneNumero = /\d/.test(inputNombreUsuario.value);
+
+    if (inputNombreUsuario.value.length > 2 && !contieneNumero) {
+      sessionStorage.setItem("nombreUsuario", inputNombreUsuario.value);
+      window.location.href = "productos.html";
+    } else {
+      containerBienvenida.innerHTML = "<p id='bienvenida-nombre-invalido'>*El nombre tiene que tener mas de 2 letras y no puede incluir números*</p>";
+    }
+  }
+
+</script>
 
 </html>
