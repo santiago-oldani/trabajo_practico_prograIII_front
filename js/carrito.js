@@ -11,16 +11,17 @@ const buscadorProductos = document.getElementById("buscador-productos");
 const botonFinalizarCompra = document.getElementById("finalizar-compra");
 
 botonFinalizarCompra.addEventListener("click", () => {
-    const modal = document.getElementById("modal-container");
-    modal.style.display = 'block';
     let carritoCargado = localStorage.getItem('carritoFarmacia');
     carritoCargado = JSON.parse(carritoCargado);
-    console.log(carritoCargado);
-    let montoTotal = 0;
 
-    const productosHTML = carritoCargado ? carritoCargado.map((producto) => {
-        montoTotal += (producto.precio * producto.cantidad);
-        return `<div id="modal-contenedor-resumen">
+    if (carritoCargado.length !== 0) {
+        const modal = document.getElementById("modal-container");
+        modal.style.display = 'block';
+        let montoTotal = 0;
+
+        const productosHTML = carritoCargado ? carritoCargado.map((producto) => {
+            montoTotal += (producto.precio * producto.cantidad);
+            return `<div id="modal-contenedor-resumen">
                     <div id="modal-subcontenedor-resumen">
                         <div class="flex-row-center-center">
                             <span>${producto.cantidad}</span>
@@ -30,9 +31,9 @@ botonFinalizarCompra.addEventListener("click", () => {
                     </div>
                     
                 </div>`;
-    }).join('') : 'El carrito está vacío.';
+        }).join('') : 'El carrito está vacío.';
 
-    modal.innerHTML = `
+        modal.innerHTML = `
     <div id='modal' class='flex-col-center-center'>
         <i class="fa fa-window-close" id='cerrar-modal' aria-hidden="true"></i>
         <h4>Resumen de tu compra: </h4>
@@ -45,20 +46,23 @@ botonFinalizarCompra.addEventListener("click", () => {
     </div>
 `;
 
-    const botonImprimir = document.getElementById("boton-imprimir");
-    botonImprimir.addEventListener("click", imprimirTicket);
+        const botonImprimir = document.getElementById("boton-imprimir");
+        botonImprimir.addEventListener("click", imprimirTicket);
 
-    const botonCerrarModal = document.getElementById("cerrar-modal");
+        const botonCerrarModal = document.getElementById("cerrar-modal");
 
-    botonCerrarModal.addEventListener("click", () => {
-        modal.style.display = 'none';
-    })
-
-    window.addEventListener("click", (e) => {
-        if (e.target === modal) {
+        botonCerrarModal.addEventListener("click", () => {
             modal.style.display = 'none';
-        }
-    })
+        })
+
+        window.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        })
+    }
+
+
 })
 
 
@@ -348,7 +352,7 @@ function mostrarCarrito() {
                 
                 <div class="subtotal-item">
                     <div class="boton-eliminar" onclick="eliminarProducto(${producto.id})"><i class="fa fa-times" aria-hidden="true"></i></div>
-                    <span>$${subtotal.toLocaleString('es-AR')}</span>
+                    <span class="carrito-producto-precio">$${subtotal.toLocaleString('es-AR')}</span>
                 </div>
                 
             </li>
