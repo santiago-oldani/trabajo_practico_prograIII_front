@@ -167,7 +167,7 @@ const productosContenedor = document.getElementById("productos-contenedor");
 
 async function traerProductos() {
     try {
-        const response = await fetch("http://localhost:3000/api/products");
+        const response = await fetch("https://farmacy-back.onrender.com/api/products");
 
         if (!response.ok) {
             throw new Error(`HTTP: ${response.status}`)
