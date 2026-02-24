@@ -167,7 +167,7 @@ const productosContenedor = document.getElementById("productos-contenedor");
 
 async function traerProductos() {
     try {
-        const response = await fetch("https://farmacy-back.onrender.com/api/products");
+        const response = await fetch("https://trabajo-practico-progra-iii-back.vercel.app/api/products");
 
         if (!response.ok) {
             throw new Error(`HTTP: ${response.status}`)
