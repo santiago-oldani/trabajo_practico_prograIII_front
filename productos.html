@@ -18,32 +18,35 @@
                 <h1>Farmacy</h1>
             </div>
 
-            <div id="nav-carrito">
-                <i class="fa fa-cart-plus" aria-hidden="true"></i>
-                <span id="contador-carrito">0</span>
+            <div class="titulo-productos-input-buscarlos">
+                <input type="text" id="buscador-productos" placeholder="Buscar productos...">
+                <div id="nav-carrito">
+                    <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                    <span id="contador-carrito">0</span>
+                </div>
             </div>
+
         </div>
     </nav>
 
     <main id="main-productos">
-        <div class="titulo-productos-input-buscarlos">
-            <h2>Nuestros productos</h2>
-            <input type="text" id="buscador-productos" placeholder="Buscar productos...">
-        </div>
-        <div id="productos">
-            <div class="flex-col-center-center contenedor-categorias-producto">
-                <div onclick="filtrarProductos(this,'todos')" class="productos-categorias categoria-activa" id="todos-los-productos">
-                    Todos los productos
-                </div>
-                <div onclick="filtrarProductos(this,'medicamento')" class="productos-categorias">
-                    Medicamentos
-                </div>
-                <div onclick="filtrarProductos(this,'crema')" class="productos-categorias">
-                    Cremas
-                </div>
-            </div>
-            <div id="productos-contenedor">
 
+        <div class="flex-row-center-center">
+            <div id="productos">
+                <div class="flex-row-center-center contenedor-categorias-producto">
+                    <div onclick="filtrarProductos(this,'todos')" class="productos-categorias categoria-activa">
+                        Todos los productos
+                    </div>
+                    <div onclick="filtrarProductos(this,'medicamento')" class="productos-categorias">
+                        Medicamentos
+                    </div>
+                    <div onclick="filtrarProductos(this,'crema')" class="productos-categorias">
+                        Cremas
+                    </div>
+                </div>
+                <div id="productos-contenedor">
+
+                </div>
             </div>
         </div>
     </main>
@@ -63,10 +66,11 @@
     </section>
     <div id="modal-container">
         <div id="modal">
-            
+
         </div>
     </div>
 </body>
 <script src="../js/carrito.js"></script>
 <script src="../js/main.js"></script>
+
 </html>
