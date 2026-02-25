@@ -1070,6 +1070,12 @@ nav ul li:hover::after {
     height: 550px;
     overflow-y: auto;
     position: relative;
+
+    @media (max-width: 500px) {
+        min-height: 350px;
+        height: auto;
+        max-height: 400px;
+    }
 }
 
 .bloque-item {
