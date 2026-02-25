@@ -17,30 +17,31 @@ botonFinalizarCompra.addEventListener("click", () => {
     if (carritoCargado.length !== 0) {
         const modal = document.getElementById("modal-container");
         modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
         let montoTotal = 0;
 
         const productosHTML = carritoCargado ? carritoCargado.map((producto) => {
             montoTotal += (producto.precio * producto.cantidad);
             return `<div id="modal-contenedor-resumen">
-                    <div id="modal-subcontenedor-resumen">
-                        <div class="flex-row-center-center">
-                            <span>${producto.cantidad}</span>
-                            <span>${producto.nombre}</span>
+                        <div id="modal-subcontenedor-resumen">
+                            <div class="flex-row-center-center">
+                                <span>${producto.cantidad}</span>
+                                <span>${producto.nombre}</span>
+                            </div>
+                            <span>$${(producto.precio * producto.cantidad).toLocaleString('es-AR')}</span>
                         </div>
-                        <span>$${(producto.precio * producto.cantidad).toLocaleString('es-AR')}</span>
-                    </div>
-                    
-                </div>`;
+                    </div>`;
         }).join('') : 'El carrito está vacío.';
 
         modal.innerHTML = `
     <div id='modal' class='flex-col-center-center'>
-        <i class="fa fa-window-close" id='cerrar-modal' aria-hidden="true"></i>
+        <i class="fa fa-times" id='cerrar-modal' aria-hidden="true"></i>
         <h4>Resumen de tu compra: </h4>
-        <hr>
-        
-        ${productosHTML}  
-        <hr>
+        <hr class="primer-hr">
+        <div class="modal-resumen-productos-contenedor">
+            ${productosHTML} 
+        </div>
+        <hr class="segundo-hr">
         <span><strong>Total: $${montoTotal.toLocaleString('es-AR')}</strong></span>
         <button id="boton-imprimir">Imprimir ticket</button>
     </div>
@@ -53,16 +54,16 @@ botonFinalizarCompra.addEventListener("click", () => {
 
         botonCerrarModal.addEventListener("click", () => {
             modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
         })
 
         window.addEventListener("click", (e) => {
             if (e.target === modal) {
                 modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
             }
         })
     }
-
-
 })
 
 
@@ -154,6 +155,9 @@ function imprimirTicket() {
 
     // --- GUARDAR PDF ---
     doc.save("ticket_compra.pdf");
+
+    vaciarCarrito();
+    window.location.reload();
 }
 
 buscadorProductos.addEventListener("keyup", (e) => buscarProductos(e));
@@ -166,20 +170,30 @@ function buscarProductos(e) {
 const productosContenedor = document.getElementById("productos-contenedor");
 
 async function traerProductos() {
+    // 1. Mostrar el spinner antes de empezar
+    productosContenedor.innerHTML = `
+        <div class="loader-contenedor">
+            <div class="spinner"></div>
+            <p>Trayendo productos de la farmacia...</p>
+        </div>
+    `;
+
     try {
         const response = await fetch("https://trabajo-practico-progra-iii-back.vercel.app/api/products");
 
         if (!response.ok) {
-            throw new Error(`HTTP: ${response.status}`)
+            throw new Error(`HTTP: ${response.status}`);
         }
 
-        productosArray = await response.json();
-        productosArray = productosArray.payload;
+        let datos = await response.json();
+        productosArray = datos.payload;
 
+        // 2. Al llamar a esta función, el HTML del spinner se borra y entran los productos
         mostrarProductos(productosArray);
 
     } catch (error) {
         console.error("error al obtener los productos", error);
+        productosContenedor.innerHTML = "<p>Error al conectar con el servidor. Reintentá más tarde.</p>";
     }
 }
 
@@ -196,13 +210,15 @@ function mostrarProductos(arrayDeProductos) {
                                     <img src="${producto.imagen}" alt="">
                                 </div>
                                 <div id="producto-subcontenedor-start">
-                                    <div id="nombre-categoria-producto-contenedor">
-                                        <h5>${producto.nombre}</h5>
-                                        <h6>${producto.categoria}</h6>
-                                    </div>
-                                    <p>$${producto.precio.toLocaleString('es-AR')}</p>
-                                    <div id="agregar-producto-button" onclick="agregarProducto(${producto.id}, '${producto.nombre}', ${producto.precio}, '${producto.imagen}')">
-                                    Agregar producto
+                                    <div class="contenido-producto">
+                                        <div id="nombre-categoria-producto-contenedor">
+                                            <h5>${producto.nombre}</h5>
+                                            <h6>${producto.categoria}</h6>
+                                        </div>
+                                        <p>$${producto.precio.toLocaleString('es-AR')}</p>
+                                        <div id="agregar-producto-button" class="boton-agregar" onclick="agregarProducto(${producto.id}, '${producto.nombre}', ${producto.precio}, '${producto.imagen}')">
+                                        Agregar producto
+                                        </div>
                                     </div>
                                 </div>
                                 
@@ -328,7 +344,7 @@ function mostrarCarrito() {
     let total = 0;
 
     if (carrito.length === 0) {
-        listaCarrito.innerHTML = `<div class="carrito-vacio"><p>No hay productos en el carrito.</p></div>`;
+        listaCarrito.innerHTML = `<div class="carrito-vacio">No hay productos en el carrito.</div>`;
         if (totalPrecioElement) totalPrecioElement.textContent = '0';
         return;
     }
@@ -376,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const botonAbrir = document.getElementById('nav-carrito');
     const botonCerrar = document.getElementById('cerrar-carrito');
     const carritoLateral = document.getElementById('carrito-lateral');
-    const botonVaciar = document.getElementById('vaciar-carrito');
+    /* const botonVaciar = document.getElementById('vaciar-carrito'); */
 
     if (botonAbrir && carritoLateral) {
         botonAbrir.addEventListener('click', () => {
@@ -389,9 +405,31 @@ document.addEventListener('DOMContentLoaded', () => {
             carritoLateral.classList.remove('visible');
         });
     }
-    if (botonVaciar) {
-        botonVaciar.addEventListener('click', vaciarCarrito);
+
+    document.addEventListener('click', (event) => {
+        const carritoLateral = document.getElementById('carrito-lateral');
+        const botonAbrir = document.getElementById('nav-carrito');
+
+        // Agregamos una condición: que el clic NO sea un botón de "Agregar"
+        const esBotonAgregar = event.target.classList.contains('boton-agregar'); // Cambiá 'boton-agregar' por tu clase real
+
+        if (carritoLateral.classList.contains('visible') &&
+            !carritoLateral.contains(event.target) &&
+            !botonAbrir.contains(event.target) &&
+            !esBotonAgregar) {
+
+            carritoLateral.classList.remove('visible');
+        }
+    });
+
+    if (carritoLateral) {
+        carritoLateral.addEventListener('click', (event) => {
+            event.stopPropagation(); // Detiene el clic acá, no deja que llegue al document
+        });
     }
+    /* if (botonVaciar) {
+        botonVaciar.addEventListener('click', vaciarCarrito);
+    } */
 });
 
 function init() {
