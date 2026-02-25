@@ -1034,19 +1034,15 @@ nav ul li:hover::after {
     position: fixed;
     top: 0;
     right: 0;
-    /* o el ancho que prefieras */
     height: 100%;
     background-color: white;
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     transform: translateX(100%);
-    /* Oculto por defecto, fuera de la vista */
     transition: transform 0.4s ease-out;
-    /* Transición suave */
     padding: 30px;
     overflow-y: auto;
     width: 400px;
-    height: 96vh;
     background: linear-gradient(180deg,
             #ffffff 0%,
             #f7f8fa 60%,
